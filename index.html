@@ -20,8 +20,6 @@
   
 
 
-
-
     <script>
         if (typeof tailwind !== 'undefined') {
             tailwind.config = {
@@ -178,6 +176,8 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Columna a Fusionar (Objetivo)</label>
                                 <select id="targetColumn" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm font-semibold text-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                    <option value="Entrada">ENTRADA</option>
+                                    <option value="Salida">SALIDA</option>
                                     <option value="Ambas">AMBAS (ENTRADA Y SALIDA)</option>
                                 </select>
                                 <p class="text-[11px] text-slate-500 mt-1">Al fusionar SALIDA, se mantienen intactos los valores de ENTRADA de m1 (o los ya fusionados previamente).</p>
@@ -561,8 +561,8 @@
         function updateKeyColumnOptions() {
             const currentVal = keyColumnSelect.value;
             keyColumnSelect.innerHTML = `<option value="__index__">Fila a fila (Por posición idéntica)</option>`;
-////
-           /* if (headersM1.length > 0) {
+
+            if (headersM1.length > 0) {
                 headersM1.forEach(col => {
                     const opt = document.createElement('option');
                     opt.value = col;
@@ -572,8 +572,7 @@
                 if ([...keyColumnSelect.options].some(o => o.value === currentVal)) {
                     keyColumnSelect.value = currentVal;
                 }
-            } +*/
-////
+            }
         }
 
         function checkMergeReady() {
