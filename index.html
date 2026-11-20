@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FusinadorODS - Fusionador de Hojas de Cálculo</title>
 
+ 
 
-  
  <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+
     <!-- SheetJS CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  
+ 
+
 
     <script>
         if (typeof tailwind !== 'undefined') {
@@ -74,7 +74,7 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight flex items-center gap-2">
-                        Fusinador <span class="text-xs bg-emerald-500 text-white font-semibold py-0.5 px-2 rounded-full">v2.2</span>
+                        Fusinador <span class="text-xs bg-emerald-500 text-white font-semibold py-0.5 px-2 rounded-full">v2.3</span>
                     </h1>
                     <p class="text-xs text-brand-200">Fusionador de Ficheros ODS/XLSX/CSV Local con CRUD Completo en Navegador</p>
                 </div>
@@ -119,7 +119,6 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between h-44">
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Fichero Principal m1 (Base)</label>
-                                <!-- Clean, Standard, Bulletproof Native Input styled with Tailwind -->
                                 <input type="file" id="file1" accept=".ods, .xlsx, .csv" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-100 file:text-brand-700 hover:file:bg-brand-200 cursor-pointer bg-white border border-slate-200 p-1.5 rounded-xl transition-all" />
                             </div>
                             
@@ -138,7 +137,6 @@
                         <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between h-44">
                             <div>
                                 <label class="block text-sm font-bold text-slate-700 mb-2">Fichero m2 (Sustituciones)</label>
-                                <!-- Clean, Standard, Bulletproof Native Input styled with Tailwind -->
                                 <input type="file" id="file2" accept=".ods, .xlsx, .csv" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-100 file:text-brand-700 hover:file:bg-brand-200 cursor-pointer bg-white border border-slate-200 p-1.5 rounded-xl transition-all" />
                             </div>
                             
@@ -177,11 +175,9 @@
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Columna a Fusionar (Objetivo)</label>
                                 <select id="targetColumn" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm font-semibold text-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500">
-                                    <option value="Entrada">ENTRADA</option>
-                                    <option value="Salida">SALIDA</option>
                                     <option value="Ambas">AMBAS (ENTRADA Y SALIDA)</option>
                                 </select>
-                                <p class="text-[11px] text-slate-500 mt-1">Puedes fusionar una columna y luego la otra (los valores ya fusionados se mantienen).</p>
+                                <p class="text-[11px] text-slate-500 mt-1">Al fusionar SALIDA, se mantienen intactos los valores de ENTRADA de m1 (o los ya fusionados previamente).</p>
                             </div>
 
                             <div class="p-4 bg-amber-50 rounded-xl border border-amber-200">
@@ -192,18 +188,23 @@
                                     Regla de Fusión
                                 </h4>
                                 <p class="text-[11px] text-amber-700 mt-1 leading-relaxed" id="ruleDescriptionText">
-                                    Si una fila de <strong>m1</strong> tiene vacía la columna seleccionada (<strong id="ruleTargetLabel">"Entrada"</strong>), se rellenará dicha columna con el valor de la columna seleccionada de su fila equivalente en <strong>m2</strong>, manteniendo los valores de <strong>m1</strong>.
+                                    Si una fila de <strong>m1</strong> tiene vacía la columna seleccionada (<strong id="ruleTargetLabel">"Entrada"</strong>), se rellenará dicha columna con el valor de su fila equivalente en <strong>m2</strong>, <strong>manteniendo intactos el resto de valores de m1 (como ENTRADA al fusionar SALIDA)</strong>.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <button id="btnMerge" disabled class="mt-6 w-full py-3 px-4 bg-slate-300 text-slate-500 rounded-xl font-bold cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path>
-                        </svg>
-                        Fusionar Ficheros
-                    </button>
+                    <div class="mt-6 flex flex-col gap-2">
+                        <button id="btnMerge" disabled class="w-full py-3 px-4 bg-slate-300 text-slate-500 rounded-xl font-bold cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"></path>
+                            </svg>
+                            Fusionar Ficheros
+                        </button>
+                        <button id="btnResetBase" class="hidden w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition-all flex items-center justify-center gap-1.5">
+                            🔄 Restaurar desde m1 original
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -243,963 +244,665 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-500 font-medium">Clave Utilizada</p>
-                    <p class="text-sm font-bold text-amber-700 truncate max-w-[150px]" id="statKey">Ninguna</p>
+                    <p class="text-xs text-slate-500 font-medium">Aún Vacíos</p>
+                    <p class="text-lg font-bold text-amber-600" id="statEmpty">0</p>
                 </div>
             </div>
         </div>
 
-        <!-- Section: Preview Table (CRUD on Merged Results) -->
-        <div id="sectionPreview" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                        Vista Previa Interactiva del Resultado
-                        <span class="text-xs bg-slate-200 text-slate-800 py-0.5 px-2.5 rounded-full font-medium" id="previewRowCount">0 filas</span>
+        <!-- Section: Data Table & CRUD -->
+        <div id="sectionResult" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+            <!-- Toolbar -->
+            <div class="p-4 border-b border-slate-200 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-slate-50/50">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-brand-100 text-brand-700 text-xs font-bold">3</span>
+                        Resultado de Fusión (Editable)
                     </h3>
-                    <p class="text-xs text-slate-500 mt-0.5">
-                        💡 <strong>CRUD Activo:</strong> Haz <strong>doble clic sobre cualquier celda</strong> para editar su contenido. Las celdas <span class="bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded text-[10px]">verdes</span> representan datos recuperados de m2.
-                    </p>
-                </div>
-                
-                <div class="flex flex-wrap items-center gap-2">
-                    <!-- Search inside Preview -->
                     <div class="relative">
-                        <input type="text" id="previewSearch" placeholder="Buscar en resultados..." class="w-48 bg-white border border-slate-200 rounded-xl py-1.5 pl-8 pr-3 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none" />
-                        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-
-                    <!-- Add Row Button -->
-                    <button onclick="addNewRow()" class="py-1.5 px-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm shadow-brand-500/10">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Añadir Fila
-                    </button>
-
-                    <!-- Export Buttons dropdown/list -->
-                    <div class="flex items-center gap-1">
-                        <button id="btnDownloadODS" class="py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-sm shadow-emerald-500/10">
-                            Descargar (.ods)
-                        </button>
-                        <button id="btnDownloadXLSX" class="py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1 shadow-sm shadow-blue-500/10">
-                            Descargar (.xlsx)
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="overflow-x-auto max-h-[450px]">
-                <table class="w-full text-left text-xs border-collapse">
-                    <thead class="bg-slate-100 sticky top-0 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200 z-10" id="tableHead">
-                        <!-- Generated Dynamically -->
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-slate-100">
-                        <!-- Generated Dynamically -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
-                <span id="previewLimitLabel">Mostrando las primeras 100 filas.</span>
-                <button id="btnLoadAllPreview" class="text-brand-600 hover:text-brand-800 font-semibold hover:underline">Ver todas las filas</button>
-            </div>
-        </div>
-
-        <!-- Section: IndexedDB History -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <div>
-                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <input type="text" id="searchInput" placeholder="Buscar en la tabla..." class="w-full sm:w-64 pl-8 pr-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
-                        Historial de Fusiones Guardado Localmente (IndexedDB)
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Las fusiones exitosas se guardan en la base de datos local del navegador para su posterior descarga o visualización.</p>
+                    </div>
                 </div>
-                <button id="btnClearHistory" class="text-xs text-rose-600 hover:text-rose-700 hover:underline font-semibold flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    Limpiar Historial
-                </button>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="btnAddRow" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 border border-brand-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+                        ➕ Añadir Fila
+                    </button>
+                    <button id="btnClearStorage" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+                        🗑️ Limpiar Memoria
+                    </button>
+                    <div class="h-4 w-px bg-slate-200 mx-1"></div>
+                    <button id="btnExportODS" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                        📥 Descargar .ODS
+                    </button>
+                    <button id="btnExportXLSX" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                        📥 Descargar .XLSX
+                    </button>
+                    <button id="btnExportCSV" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                        📥 Descargar .CSV
+                    </button>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider pb-2">
-                            <th class="py-3 px-4">Fecha y Hora</th>
-                            <th class="py-3 px-4">Identificador / Título</th>
-                            <th class="py-3 px-4">Fichero Base (m1)</th>
-                            <th class="py-3 px-4">Fichero Sustituto (m2)</th>
-                            <th class="py-3 px-4">Clave Usada</th>
-                            <th class="py-3 px-4 text-center">Modificados</th>
-                            <th class="py-3 px-4 text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyBody" class="divide-y divide-slate-100 text-slate-600">
-                        <tr>
-                            <td colspan="7" class="py-8 text-center text-slate-400">No hay fusiones registradas en el historial local.</td>
-                        </tr>
-                    </tbody>
+
+            <!-- Table Container -->
+            <div class="overflow-x-auto max-h-[550px]">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead id="tableHead" class="bg-slate-100 text-slate-600 sticky top-0 z-10 shadow-sm uppercase font-bold"></thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-200"></tbody>
                 </table>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+                <span id="rowCountInfo">Mostrando 0 registros</span>
+                <span class="flex items-center gap-3">
+                    <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-100 border border-emerald-400"></span> Celda rellenada desde m2</span>
+                    <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-sky-100 border border-sky-400"></span> Editado manualmente</span>
+                </span>
             </div>
         </div>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 text-center py-4 text-xs text-slate-500 shrink-0">
-        MergeODS Studio &copy; 2026. Diseñado profesionalmente para un procesamiento de datos local y seguro.
-    </footer>
-
-    <!-- INTERACTIVE APP LOGIC -->
     <script>
-        // --- APPLICATION STATE ---
-        let file1Workbook = null;
-        let file2Workbook = null;
-        let file1SheetName = "";
-        let file2SheetName = "";
-        
-        let file1RawData = null; 
-        let file2RawData = null;
-        
-        let file1Data = null; 
-        let file2Data = null;
-        
-        let file1Name = "";
-        let file2Name = "";
-        
-        let mergedResult = null; 
-        let selectedKeyColumn = "__index__";
-        let selectedTargetColumn = "Entrada";
-        let showAllPreview = false;
-        
-        let db = null;
-        let isIndexedDBSupported = true;
-        let memoryHistory = [];
+        // ==========================================
+        // ALMACENAMIENTO SEGURO CON FALLBACK EN MEMORIA
+        // ==========================================
+        const StorageEngine = {
+            memory: {},
+            db: null,
+            useFallback: false,
+            async init() {
+                try {
+                    if (!window.indexedDB) {
+                        this.useFallback = true;
+                        return;
+                    }
+                    return new Promise((resolve) => {
+                        const req = indexedDB.open('FusinadorODS_DB', 1);
+                        req.onupgradeneeded = (e) => {
+                            const db = e.target.result;
+                            if (!db.objectStoreNames.contains('state')) {
+                                db.createObjectStore('state');
+                            }
+                        };
+                        req.onsuccess = (e) => {
+                            this.db = e.target.result;
+                            resolve();
+                        };
+                        req.onerror = () => {
+                            this.useFallback = true;
+                            resolve();
+                        };
+                    });
+                } catch (e) {
+                    this.useFallback = true;
+                }
+            },
+            async save(key, val) {
+                this.memory[key] = val;
+                if (this.useFallback || !this.db) return;
+                try {
+                    const tx = this.db.transaction('state', 'readwrite');
+                    tx.objectStore('state').put(val, key);
+                } catch (e) {
+                    this.useFallback = true;
+                }
+            },
+            async load(key) {
+                if (this.useFallback || !this.db) return this.memory[key] || null;
+                return new Promise((resolve) => {
+                    try {
+                        const tx = this.db.transaction('state', 'readonly');
+                        const req = tx.objectStore('state').get(key);
+                        req.onsuccess = () => resolve(req.result ?? this.memory[key] ?? null);
+                        req.onerror = () => resolve(this.memory[key] || null);
+                    } catch (e) {
+                        resolve(this.memory[key] || null);
+                    }
+                });
+            },
+            async clear() {
+                this.memory = {};
+                if (this.useFallback || !this.db) return;
+                try {
+                    const tx = this.db.transaction('state', 'readwrite');
+                    tx.objectStore('state').clear();
+                } catch (e) {}
+            }
+        };
 
-        // --- DOM SELECTORS ---
+        // ==========================================
+        // ESTADO DE LA APLICACIÓN
+        // ==========================================
+        let wb1 = null, wb2 = null;
+        let dataM1 = [];      // Datos originales de m1
+        let dataM2 = [];      // Datos originales de m2
+        let headersM1 = [];   // Orden de columnas de m1
+        let headersM2 = [];   // Orden de columnas de m2
+        let mergedData = [];  // Estado acumulado de la fusión (preserva ENTRADA de m1 al fusionar SALIDA y viceversa)
+        let cellMeta = {};    // Metadatos de celdas: { "rowIdx_colName": "subbed" | "edited" }
+
+        // Elementos DOM
         const file1Input = document.getElementById('file1');
         const file2Input = document.getElementById('file2');
-        
         const info1 = document.getElementById('info1');
         const info2 = document.getElementById('info2');
-        
         const sheetSelector1Container = document.getElementById('sheetSelector1Container');
         const sheetSelector2Container = document.getElementById('sheetSelector2Container');
         const sheetSelector1 = document.getElementById('sheetSelector1');
         const sheetSelector2 = document.getElementById('sheetSelector2');
-        
         const keyColumnSelect = document.getElementById('keyColumn');
         const targetColumnSelect = document.getElementById('targetColumn');
         const ruleTargetLabel = document.getElementById('ruleTargetLabel');
+        const ruleDescriptionText = document.getElementById('ruleDescriptionText');
         const btnMerge = document.getElementById('btnMerge');
-
-        if (targetColumnSelect) {
-            targetColumnSelect.addEventListener('change', () => {
-                selectedTargetColumn = targetColumnSelect.value;
-                if (ruleTargetLabel) {
-                    ruleTargetLabel.textContent = selectedTargetColumn === 'Ambas' ? '"Entrada" y "Salida"' : `"${selectedTargetColumn}"`;
-                }
-            });
-        }
-        
+        const btnResetBase = document.getElementById('btnResetBase');
         const sectionStats = document.getElementById('sectionStats');
+        const sectionResult = document.getElementById('sectionResult');
         const statM1 = document.getElementById('statM1');
         const statM2 = document.getElementById('statM2');
         const statSubbed = document.getElementById('statSubbed');
-        const statKey = document.getElementById('statKey');
-        
-        const sectionPreview = document.getElementById('sectionPreview');
-        const previewRowCount = document.getElementById('previewRowCount');
+        const statEmpty = document.getElementById('statEmpty');
         const tableHead = document.getElementById('tableHead');
         const tableBody = document.getElementById('tableBody');
-        const previewSearch = document.getElementById('previewSearch');
-        const previewLimitLabel = document.getElementById('previewLimitLabel');
-        const btnLoadAllPreview = document.getElementById('btnLoadAllPreview');
-        
-        const btnDownloadODS = document.getElementById('btnDownloadODS');
-        const btnDownloadXLSX = document.getElementById('btnDownloadXLSX');
-        const historyBody = document.getElementById('historyBody');
-        const btnClearHistory = document.getElementById('btnClearHistory');
+        const searchInput = document.getElementById('searchInput');
+        const rowCountInfo = document.getElementById('rowCountInfo');
 
-        // --- SAFE INDEXEDDB INITIALIZATION (CRUD WITH MEMORY FALLBACK) ---
-        const initDB = () => {
-            try {
-                if (!window.indexedDB) {
-                    console.warn("IndexedDB no soportado por este navegador. Usando fallback en memoria.");
-                    isIndexedDBSupported = false;
-                    loadHistory();
-                    return;
-                }
-                const request = indexedDB.open('ODSMergerStudioDB', 2);
-                request.onerror = (e) => {
-                    console.error("IndexedDB error, usando fallback de memoria.", e);
-                    isIndexedDBSupported = false;
-                    loadHistory();
-                };
-                request.onsuccess = (e) => {
-                    db = e.target.result;
-                    loadHistory();
-                };
-                request.onupgradeneeded = (e) => {
-                    const dbInstance = e.target.result;
-                    if (!dbInstance.objectStoreNames.contains('history')) {
-                        dbInstance.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
-                    }
-                };
-            } catch (err) {
-                console.error("Fallo general al abrir IndexedDB (probablemente navegación privada). Fallback en memoria habilitado.", err);
-                isIndexedDBSupported = false;
-                loadHistory();
-            }
-        };
+        // ==========================================
+        // FUNCIONES AUXILIARES
+        // ==========================================
+        function normalizeStr(str) {
+            return String(str || '')
+                .trim()
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        }
 
-        const saveToHistory = (item) => {
-            if (isIndexedDBSupported && db) {
-                try {
-                    const transaction = db.transaction(['history'], 'readwrite');
-                    const store = transaction.objectStore('history');
-                    store.add(item);
-                    transaction.oncomplete = () => loadHistory();
-                } catch (e) {
-                    console.error("Fallo al guardar en IndexedDB, usando memoria.", e);
-                    saveToMemory(item);
-                }
+        function isEmptyVal(val) {
+            if (val === null || val === undefined) return true;
+            const s = String(val).trim();
+            return s === '' || s === '-' || s.toLowerCase() === 'null' || s.toLowerCase() === 'nan';
+        }
+
+        // Busca el nombre real de una columna en un listado de cabeceras (ej. "Entrada" o "Salida")
+        function findMatchingColumn(headers, targetType) {
+            const normTarget = normalizeStr(targetType);
+            // 1. Coincidencia exacta normalizada
+            let exact = headers.find(h => normalizeStr(h) === normTarget);
+            if (exact) return exact;
+            // 2. Coincidencia parcial (ej. "Hora Entrada", "F. Salida", etc.)
+            let partial = headers.find(h => normalizeStr(h).includes(normTarget));
+            return partial || null;
+        }
+
+        function deepCloneRows(rows) {
+            return rows.map(r => ({ ...r }));
+        }
+
+        // Actualiza el texto explicativo según la opción seleccionada
+        targetColumnSelect.addEventListener('change', () => {
+            const val = targetColumnSelect.value;
+            if (val === 'Salida') {
+                ruleDescriptionText.innerHTML = `
+                    Al seleccionar <strong>"SALIDA"</strong>, se mantienen intactos todos los valores de la columna <strong>ENTRADA</strong> (y demás columnas) de <strong>m1</strong>. Si una fila tiene vacía la columna <strong>SALIDA</strong>, se completará con el valor de <strong>SALIDA</strong> de su fila equivalente en <strong>m2</strong>.
+                `;
+            } else if (val === 'Entrada') {
+                ruleDescriptionText.innerHTML = `
+                    Al seleccionar <strong>"ENTRADA"</strong>, se mantienen intactos todos los valores de la columna <strong>SALIDA</strong> (y demás columnas) de <strong>m1</strong>. Si una fila tiene vacía la columna <strong>ENTRADA</strong>, se completará con el valor de <strong>ENTRADA</strong> de su fila equivalente en <strong>m2</strong>.
+                `;
             } else {
-                saveToMemory(item);
+                ruleDescriptionText.innerHTML = `
+                    Al seleccionar <strong>"AMBAS (ENTRADA Y SALIDA)"</strong>, se evaluarán independientemente ambas columnas en cada fila: siempre se conservan los valores que ya tenga <strong>m1</strong> y solo se rellenan desde <strong>m2</strong> las celdas que estén vacías.
+                `;
             }
-        };
+        });
 
-        const saveToMemory = (item) => {
-            item.id = Date.now();
-            memoryHistory.push(item);
-            loadHistory();
-        };
-
-        const loadHistory = () => {
-            if (isIndexedDBSupported && db) {
-                try {
-                    const transaction = db.transaction(['history'], 'readonly');
-                    const store = transaction.objectStore('history');
-                    const request = store.getAll();
-                    
-                    request.onsuccess = () => {
-                        renderHistoryList(request.result);
-                    };
-                    request.onerror = () => {
-                        renderHistoryList(memoryHistory);
-                    };
-                } catch (e) {
-                    renderHistoryList(memoryHistory);
-                }
-            } else {
-                renderHistoryList(memoryHistory);
-            }
-        };
-
-        const renderHistoryList = (list) => {
-            const sortedList = [...list].reverse(); // Last one first
-            if (sortedList.length === 0) {
-                historyBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="py-8 text-center text-slate-400">No hay fusiones registradas en el historial local.</td>
-                    </tr>`;
-                return;
-            }
-            
-            historyBody.innerHTML = sortedList.map(item => `
-                <tr class="hover:bg-slate-50 transition-all duration-150 border-b border-slate-100">
-                    <td class="py-3 px-4 text-xs text-slate-500">${new Date(item.timestamp).toLocaleString()}</td>
-                    <td class="py-3 px-4 font-semibold text-slate-900">
-                        <div class="flex items-center gap-1.5">
-                            <span id="title-text-${item.id}">${escapeHtml(item.title || 'Fusión sin título')}</span>
-                            <button onclick="editHistoryTitle(${item.id})" class="text-slate-400 hover:text-brand-600">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                            </button>
-                        </div>
-                    </td>
-                    <td class="py-3 px-4 font-mono text-xs text-slate-600 max-w-[150px] truncate" title="${escapeHtml(item.file1Name)}">${escapeHtml(item.file1Name)}</td>
-                    <td class="py-3 px-4 font-mono text-xs text-slate-600 max-w-[150px] truncate" title="${escapeHtml(item.file2Name)}">${escapeHtml(item.file2Name)}</td>
-                    <td class="py-3 px-4 text-slate-600 font-medium">${escapeHtml(item.keyUsed === '__index__' ? 'Fila a Fila' : item.keyUsed)}</td>
-                    <td class="py-3 px-4 text-center">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
-                            ${item.rowCount} filas
-                        </span>
-                    </td>
-                    <td class="py-3 px-4 text-right">
-                        <div class="flex items-center justify-end gap-2">
-                            <button onclick="loadHistoryItem(${item.id})" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-1">
-                                👁️ Cargar
-                            </button>
-                            <button onclick="downloadHistoryItem(${item.id}, 'ods')" class="text-xs text-emerald-600 hover:text-emerald-800 font-bold flex items-center gap-0.5">
-                                💾 ODS
-                            </button>
-                            <button onclick="downloadHistoryItem(${item.id}, 'xlsx')" class="text-xs text-blue-600 hover:text-blue-800 font-bold flex items-center gap-0.5">
-                                XLSX
-                            </button>
-                            <button onclick="deleteHistoryItem(${item.id})" class="text-xs text-rose-600 hover:text-rose-800 font-bold">
-                                ❌ Eliminar
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        };
-
-        window.deleteHistoryItem = (id) => {
-            if (confirm("¿Estás seguro de que deseas eliminar este registro del historial?")) {
-                if (isIndexedDBSupported && db) {
-                    try {
-                        const transaction = db.transaction(['history'], 'readwrite');
-                        const store = transaction.objectStore('history');
-                        store.delete(id);
-                        transaction.oncomplete = () => loadHistory();
-                    } catch (e) {
-                        deleteFromMemory(id);
-                    }
-                } else {
-                    deleteFromMemory(id);
-                }
-            }
-        };
-
-        const deleteFromMemory = (id) => {
-            memoryHistory = memoryHistory.filter(item => item.id !== id);
-            loadHistory();
-        };
-
-        window.editHistoryTitle = (id) => {
-            if (isIndexedDBSupported && db) {
-                const transaction = db.transaction(['history'], 'readonly');
-                const store = transaction.objectStore('history');
-                const request = store.get(id);
-                request.onsuccess = () => {
-                    const item = request.result;
-                    if (!item) return;
-                    const newTitle = prompt("Edita el título o identificador de esta fusión:", item.title || "");
-                    if (newTitle !== null) {
-                        item.title = newTitle.trim() || "Fusión sin título";
-                        const writeTx = db.transaction(['history'], 'readwrite');
-                        writeTx.objectStore('history').put(item);
-                        writeTx.oncomplete = () => loadHistory();
-                    }
-                };
-            } else {
-                const item = memoryHistory.find(i => i.id === id);
-                if (item) {
-                    const newTitle = prompt("Edita el título o identificador de esta fusión:", item.title || "");
-                    if (newTitle !== null) {
-                        item.title = newTitle.trim() || "Fusión sin título";
-                        loadHistory();
-                    }
-                }
-            }
-        };
-
-        window.loadHistoryItem = (id) => {
-            const applyLoadedData = (item) => {
-                mergedResult = JSON.parse(JSON.stringify(item.mergedData));
-                file1Name = item.file1Name;
-                selectedKeyColumn = item.keyUsed;
-                
-                // Show stats
-                sectionStats.classList.remove('hidden');
-                statM1.innerText = item.mergedData.length;
-                statM2.innerText = "N/D (Historial)";
-                statSubbed.innerText = item.rowCount;
-                statKey.innerText = item.keyUsed === '__index__' ? 'Fila a Fila' : item.keyUsed;
-                
-                // Render preview
-                renderPreview(mergedResult);
-                alert("Fusión cargada con éxito en la vista previa interactiva. Puedes editarla, eliminar o añadir filas, y descargarla en cualquier formato.");
-            };
-
-            if (isIndexedDBSupported && db) {
-                const transaction = db.transaction(['history'], 'readonly');
-                const store = transaction.objectStore('history');
-                const request = store.get(id);
-                request.onsuccess = () => {
-                    if (request.result) applyLoadedData(request.result);
-                };
-            } else {
-                const item = memoryHistory.find(i => i.id === id);
-                if (item) applyLoadedData(item);
-            }
-        };
-
-        window.downloadHistoryItem = (id, format) => {
-            const triggerDownload = (item) => {
-                const baseName = item.file1Name.substring(0, item.file1Name.lastIndexOf('.')) || item.file1Name;
-                exportData(item.mergedData, `fusionado_${baseName}.${format}`, format);
-            };
-
-            if (isIndexedDBSupported && db) {
-                const transaction = db.transaction(['history'], 'readonly');
-                const store = transaction.objectStore('history');
-                const request = store.get(id);
-                request.onsuccess = () => {
-                    if (request.result) triggerDownload(request.result);
-                };
-            } else {
-                const item = memoryHistory.find(i => i.id === id);
-                if (item) triggerDownload(item);
-            }
-        };
-
-        btnClearHistory.onclick = () => {
-            if (confirm("¿Estás seguro de que deseas eliminar permanentemente TODO el historial? Esta acción no se puede deshacer.")) {
-                if (isIndexedDBSupported && db) {
-                    try {
-                        const transaction = db.transaction(['history'], 'readwrite');
-                        const store = transaction.objectStore('history');
-                        store.clear();
-                        transaction.oncomplete = () => loadHistory();
-                    } catch (e) {
-                        memoryHistory = [];
-                        loadHistory();
-                    }
-                } else {
-                    memoryHistory = [];
-                    loadHistory();
-                }
-            }
-        };
-
-        // --- FILE PARSING USING SHEETJS ---
-        const processFile = (file, isFirstFile) => {
-            if (typeof XLSX === 'undefined') {
-                alert("⚠️ Error de Biblioteca: La librería externa de procesamiento de hojas de cálculo (SheetJS) no ha podido cargarse.\n\nComprueba que tienes conexión a Internet, ya que la aplicación la descarga mediante un enlace CDN seguro. Si estás en una red corporativa, comprueba que no esté bloqueando el acceso a 'cdn.jsdelivr.net'.");
-                resetInfo(isFirstFile);
-                return;
-            }
-
+        // ==========================================
+        // LECTURA DE FICHEROS (ODS / XLSX / CSV)
+        // ==========================================
+        function readSpreadsheet(file, isM1) {
             const reader = new FileReader();
-            const targetInfo = isFirstFile ? info1 : info2;
-            
-            targetInfo.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-brand-600"></div>
-                    <span class="text-brand-700 font-semibold text-xs">Analizando archivo...</span>
-                </div>
-            `;
+            const infoEl = isM1 ? info1 : info2;
+            infoEl.innerHTML = `<span class="text-brand-600 font-semibold animate-pulse">⏳ Leyendo archivo ${file.name}...</span>`;
 
             reader.onload = (e) => {
                 try {
                     const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    
-                    if (isFirstFile) {
-                        file1Workbook = workbook;
-                        file1Name = file.name;
-                        setupSheetSelector(workbook, true);
+                    const wb = XLSX.read(data, { type: 'array', cellDates: true, raw: false });
+
+                    if (isM1) {
+                        wb1 = wb;
+                        setupSheetSelector(wb, sheetSelector1, sheetSelector1Container, true, file.name);
                     } else {
-                        file2Workbook = workbook;
-                        file2Name = file.name;
-                        setupSheetSelector(workbook, false);
+                        wb2 = wb;
+                        setupSheetSelector(wb, sheetSelector2, sheetSelector2Container, false, file.name);
                     }
-                    
-                    checkActivation();
-                } catch (error) {
-                    alert("No se pudo leer el archivo. Asegúrate de que es un fichero .ods, .csv o .xlsx válido.");
-                    console.error(error);
-                    resetInfo(isFirstFile);
+                } catch (err) {
+                    console.error('Error al leer archivo:', err);
+                    infoEl.innerHTML = `<span class="text-rose-600 font-semibold">❌ Error al procesar ${file.name}. Verifica el formato.</span>`;
                 }
             };
-            
             reader.readAsArrayBuffer(file);
-        };
+        }
 
-        const setupSheetSelector = (workbook, isFirstFile) => {
-            const sheetNames = workbook.SheetNames;
-            const container = isFirstFile ? sheetSelector1Container : sheetSelector2Container;
-            const select = isFirstFile ? sheetSelector1 : sheetSelector2;
-            
-            select.innerHTML = "";
-            sheetNames.forEach(name => {
+        function setupSheetSelector(wb, selectEl, containerEl, isM1, fileName) {
+            selectEl.innerHTML = '';
+            wb.SheetNames.forEach((name) => {
                 const opt = document.createElement('option');
                 opt.value = name;
-                opt.textContent = name;
-                select.appendChild(opt);
+                opt.textContent = `Hoja: ${name}`;
+                selectEl.appendChild(opt);
             });
 
-            if (sheetNames.length > 1) {
-                container.classList.remove('hidden');
+            if (wb.SheetNames.length > 1) {
+                containerEl.classList.remove('hidden');
             } else {
-                container.classList.add('hidden');
+                containerEl.classList.add('hidden');
             }
 
-            // Load first sheet by default
-            loadSheetData(workbook, sheetNames[0], isFirstFile);
+            selectEl.onchange = () => parseSheetData(wb, selectEl.value, isM1, fileName);
+            parseSheetData(wb, wb.SheetNames[0], isM1, fileName);
+        }
 
-            // Trigger on select change
-            select.onchange = () => {
-                loadSheetData(workbook, select.value, isFirstFile);
-            };
-        };
+        function parseSheetData(wb, sheetName, isM1, fileName) {
+            const sheet = wb.Sheets[sheetName];
+            const matrix = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
 
-        const loadSheetData = (workbook, sheetName, isFirstFile) => {
-            const worksheet = workbook.Sheets[sheetName];
-            const rawJson = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-            const cleanedJson = cleanJsonData(rawJson);
-            
-            const count = cleanedJson.length;
-            const targetInfo = isFirstFile ? info1 : info2;
-            const targetName = isFirstFile ? file1Name : file2Name;
-            
-            if (isFirstFile) {
-                file1Data = cleanedJson;
-                file1SheetName = sheetName;
-                mergedResult = null;
-            } else {
-                file2Data = cleanedJson;
-                file2SheetName = sheetName;
-                mergedResult = null;
+            const infoEl = isM1 ? info1 : info2;
+            if (!matrix || matrix.length === 0) {
+                infoEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ La hoja "${sheetName}" está vacía.</span>`;
+                return;
             }
-            updateKeySelector();
 
-            targetInfo.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <span class="text-emerald-600 font-bold">✓</span>
-                    <span class="text-slate-800 font-semibold truncate max-w-[150px]" title="${escapeHtml(targetName)}">${escapeHtml(targetName)}</span>
-                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded-full">${count} filas</span>
-                </div>
-            `;
-            checkActivation();
-        };
-
-        const resetInfo = (isFirstFile) => {
-            const targetInfo = isFirstFile ? info1 : info2;
-            targetInfo.innerHTML = `
-                <span class="text-slate-400">⚠️ No se ha seleccionado ningún archivo aún.</span>
-            `;
-            if (isFirstFile) {
-                file1Data = null;
-                sheetSelector1Container.classList.add('hidden');
-            } else {
-                file2Data = null;
-                sheetSelector2Container.classList.add('hidden');
-            }
-            checkActivation();
-        };
-
-        const cleanJsonData = (data) => {
-            if (!Array.isArray(data)) return [];
-            return data.map(row => {
-                const cleanRow = {};
-                for (let key in row) {
-                    if (row.hasOwnProperty(key)) {
-                        const cleanKey = key.trim();
-                        let cleanVal = row[key];
-                        if (typeof cleanVal === 'string') {
-                            cleanVal = cleanVal.trim();
-                        }
-                        cleanRow[cleanKey] = cleanVal;
-                    }
-                }
-                return cleanRow;
+            // Extraer cabeceras asegurando nombres únicos no vacíos
+            const rawHeaders = matrix[0].map((h, i) => {
+                const clean = String(h ?? '').trim();
+                return clean !== '' ? clean : `Columna_${i + 1}`;
             });
-        };
 
-        const updateKeySelector = () => {
-            if (!file1Data || file1Data.length === 0) return;
-            const columns = Object.keys(file1Data[0]);
-            
-            keyColumnSelect.innerHTML = '<option value="__index__">Fila a fila (Por posición idéntica)</option>';
-            
-            columns.forEach(col => {
-                const colLower = col.toLowerCase();
-                if (colLower !== 'entrada' && colLower !== 'salida' && colLower !== 'qr') {
+            // Extraer filas de datos (ignorando filas 100% vacías)
+            const rows = [];
+            for (let r = 1; r < matrix.length; r++) {
+                const rowArr = matrix[r];
+                if (!rowArr || rowArr.every(cell => isEmptyVal(cell))) continue;
+                const rowObj = {};
+                rawHeaders.forEach((colName, cIdx) => {
+                    rowObj[colName] = rowArr[cIdx] !== undefined && rowArr[cIdx] !== null ? String(rowArr[cIdx]).trim() : '';
+                });
+                rows.push(rowObj);
+            }
+
+            if (isM1) {
+                headersM1 = rawHeaders;
+                dataM1 = rows;
+                // Al cargar un nuevo fichero m1, reiniciamos la base fusionada con una copia limpia de m1
+                mergedData = deepCloneRows(dataM1);
+                cellMeta = {};
+                btnResetBase.classList.add('hidden');
+                infoEl.innerHTML = `<span class="text-emerald-700 font-semibold">✅ <strong>${fileName}</strong> cargado (${rows.length} filas, ${rawHeaders.length} cols)</span>`;
+            } else {
+                headersM2 = rawHeaders;
+                dataM2 = rows;
+                infoEl.innerHTML = `<span class="text-emerald-700 font-semibold">✅ <strong>${fileName}</strong> cargado (${rows.length} filas, ${rawHeaders.length} cols)</span>`;
+            }
+
+            updateKeyColumnOptions();
+            checkMergeReady();
+        }
+
+        function updateKeyColumnOptions() {
+            const currentVal = keyColumnSelect.value;
+            keyColumnSelect.innerHTML = `<option value="__index__">Fila a fila (Por posición idéntica)</option>`;
+////
+           /* if (headersM1.length > 0) {
+                headersM1.forEach(col => {
                     const opt = document.createElement('option');
                     opt.value = col;
-                    opt.textContent = col;
+                    opt.textContent = `Columna: ${col}`;
                     keyColumnSelect.appendChild(opt);
+                });
+                if ([...keyColumnSelect.options].some(o => o.value === currentVal)) {
+                    keyColumnSelect.value = currentVal;
                 }
-            });
+            } +*/
+////
+        }
 
-            const commonColumns = getCommonColumns();
-            const bestKey = selectBestKey(commonColumns);
-            keyColumnSelect.value = bestKey;
-            selectedKeyColumn = bestKey;
-        };
-
-        const getCommonColumns = () => {
-            if (!file1Data || !file2Data || file1Data.length === 0 || file2Data.length === 0) return [];
-            const keys1 = Object.keys(file1Data[0]);
-            const keys2 = Object.keys(file2Data[0]);
-            const keys2Set = new Set(keys2.map(k => k.toLowerCase()));
-            
-            return keys1.filter(k => {
-                const kLower = k.toLowerCase();
-                if (kLower === 'entrada' || kLower === 'salida' || kLower === 'qr') return false;
-                return keys2Set.has(kLower);
-            });
-        };
-
-        const selectBestKey = (commonCols) => {
-            const priorities = ['dni', 'nif', 'nie', 'correo', 'email', 'id', 'código', 'codigo', 'nombre completo', 'nombre'];
-            for (let p of priorities) {
-                const found = commonCols.find(col => col.toLowerCase() === p);
-                if (found) return found;
-            }
-            return '__index__';
-        };
-
-        const checkActivation = () => {
-            if (Array.isArray(file1Data) && Array.isArray(file2Data)) {
+        function checkMergeReady() {
+            if (dataM1.length > 0 && dataM2.length > 0) {
                 btnMerge.disabled = false;
-                btnMerge.removeAttribute('disabled');
-                btnMerge.className = "mt-6 w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold cursor-pointer transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20";
+                btnMerge.className = "w-full py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold cursor-pointer transition-all duration-200 flex items-center justify-center gap-2 shadow-md";
             } else {
                 btnMerge.disabled = true;
-                btnMerge.setAttribute('disabled', 'disabled');
-                btnMerge.className = "mt-6 w-full py-3 px-4 bg-slate-300 text-slate-500 rounded-xl font-bold cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-sm";
+                btnMerge.className = "w-full py-3 px-4 bg-slate-300 text-slate-500 rounded-xl font-bold cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-sm";
             }
-        };
+        }
 
-        // --- MERGE ALGORITHM IMPLEMENTATION ---
-        btnMerge.onclick = () => {
-            if (!file1Data || !file2Data) return;
-
-            const keyCol = keyColumnSelect.value;
-            const targetSelection = targetColumnSelect ? targetColumnSelect.value : 'Entrada';
-            selectedKeyColumn = keyCol;
-            selectedTargetColumn = targetSelection;
-            let modifiedCount = 0;
-
-            const targetCols = targetSelection === 'Ambas' ? ['Entrada', 'Salida'] : [targetSelection];
-
-            const entradaKeyM1 = findColumnKeyCaseInsensitive(file1Data[0] || {}, 'entrada');
-            const salidaKeyM1 = findColumnKeyCaseInsensitive(file1Data[0] || {}, 'salida');
-            const entradaKeyM2 = findColumnKeyCaseInsensitive(file2Data[0] || {}, 'entrada');
-            const salidaKeyM2 = findColumnKeyCaseInsensitive(file2Data[0] || {}, 'salida');
-
-            const m2EntradaMap = new Map();
-            const m2SalidaMap = new Map();
-            
-            if (keyCol !== '__index__') {
-                const keyColM2 = findColumnKeyCaseInsensitive(file2Data[0] || {}, keyCol);
-                file2Data.forEach(row2 => {
-                    const keyVal = String(row2[keyColM2] || '').trim().toLowerCase();
-                    if (keyVal) {
-                        const entVal = String(row2[entradaKeyM2] || '').trim();
-                        if (entVal !== "" && entVal.toLowerCase() !== "nan") {
-                            m2EntradaMap.set(keyVal, row2[entradaKeyM2]);
-                        }
-                        const salVal = String(row2[salidaKeyM2] || '').trim();
-                        if (salVal !== "" && salVal.toLowerCase() !== "nan") {
-                            m2SalidaMap.set(keyVal, row2[salidaKeyM2]);
-                        }
-                    }
-                });
-            }
-
-            // Si ya se había hecho una fusión previa sobre los mismos archivos (por ejemplo, primero ENTRADA y luego SALIDA),
-            // partimos de mergedResult para mantener los valores ya fusionados, asegurando siempre que los valores originales de M1 prevalezcan.
-            const baseData = (mergedResult && mergedResult.length === file1Data.length) ? mergedResult : file1Data;
-            
-            mergedResult = baseData.map((currentRow, index) => {
-                const origRowM1 = file1Data[index] || {};
-                const newRow = { ...origRowM1, ...currentRow };
-
-                // Garantizar siempre que si M1 tenía valor original en Entrada o Salida, se mantenga el de M1
-                const origEntradaM1 = String(origRowM1[entradaKeyM1] || '').trim();
-                if (origEntradaM1 !== "" && origEntradaM1.toLowerCase() !== "nan") {
-                    newRow[entradaKeyM1] = origRowM1[entradaKeyM1];
-                }
-                const origSalidaM1 = String(origRowM1[salidaKeyM1] || '').trim();
-                if (origSalidaM1 !== "" && origSalidaM1.toLowerCase() !== "nan") {
-                    newRow[salidaKeyM1] = origRowM1[salidaKeyM1];
-                }
-
-                // Aplicar la regla sobre la(s) columna(s) seleccionada(s)
-                targetCols.forEach(colOption => {
-                    const isEntrada = colOption.toLowerCase() === 'entrada';
-                    const keyM1 = isEntrada ? entradaKeyM1 : salidaKeyM1;
-                    const keyM2 = isEntrada ? entradaKeyM2 : salidaKeyM2;
-                    const mapM2 = isEntrada ? m2EntradaMap : m2SalidaMap;
-                    const flagName = isEntrada ? '_replacedEntrada' : '_replacedSalida';
-
-                    const valActual = String(newRow[keyM1] || '').trim();
-                    const isEmpty = valActual === "" || valActual.toLowerCase() === "nan";
-
-                    if (isEmpty) {
-                        let matchingVal = null;
-                        if (keyCol === '__index__') {
-                            const matchingRow2 = file2Data[index];
-                            if (matchingRow2) {
-                                const valM2 = String(matchingRow2[keyM2] || '').trim();
-                                if (valM2 !== "" && valM2.toLowerCase() !== "nan") {
-                                    matchingVal = matchingRow2[keyM2];
-                                }
-                            }
-                        } else {
-                            const keyColM1 = findColumnKeyCaseInsensitive(newRow, keyCol);
-                            const keyVal1 = String(newRow[keyColM1] || '').trim().toLowerCase();
-                            if (mapM2.has(keyVal1)) {
-                                matchingVal = mapM2.get(keyVal1);
-                            }
-                        }
-
-                        if (matchingVal !== null && matchingVal !== undefined && String(matchingVal).trim() !== "") {
-                            newRow[keyM1] = matchingVal;
-                            newRow[flagName] = true;
-                        }
-                    }
-                });
-
-                newRow['_replaced'] = Boolean(newRow['_replacedEntrada'] || newRow['_replacedSalida']);
-                if (newRow['_replaced']) {
-                    modifiedCount++;
-                }
-                
-                return newRow;
-            });
-
-            sectionStats.classList.remove('hidden');
-            statM1.innerText = file1Data.length;
-            statM2.innerText = file2Data.length;
-            statSubbed.innerText = modifiedCount;
-            statKey.innerText = `${keyCol === '__index__' ? 'Fila a Fila' : keyCol} (${targetSelection})`;
-
-            const filenameNoExt = file1Name.substring(0, file1Name.lastIndexOf('.')) || file1Name;
-            saveToHistory({
-                title: `Fusión (${targetSelection}): ${filenameNoExt}`,
-                timestamp: Date.now(),
-                file1Name: file1Name,
-                file2Name: file2Name,
-                rowCount: modifiedCount,
-                keyUsed: keyCol,
-                mergedData: mergedResult
-            });
-
-            showAllPreview = false;
-            renderPreview(mergedResult);
-        };
-
-        const findColumnKeyCaseInsensitive = (rowObj, targetKey) => {
-            const targetClean = targetKey.trim().toLowerCase();
-            return Object.keys(rowObj).find(k => k.trim().toLowerCase() === targetClean) || targetKey;
-        };
-
-        // --- PREVIEW RENDERER (WITH CRUD OPERATIONS) ---
-        const renderPreview = (data) => {
-            if (!data || data.length === 0) {
-                sectionPreview.classList.add('hidden');
-                return;
-            }
-
-            const query = previewSearch.value.trim().toLowerCase();
-            const internalFlags = ['_replaced', '_replacedEntrada', '_replacedSalida'];
-            const columns = Object.keys(data[0]).filter(k => !internalFlags.includes(k));
-            const entradaCol = findColumnKeyCaseInsensitive(data[0], 'entrada');
-            const salidaCol = findColumnKeyCaseInsensitive(data[0], 'salida');
-
-            tableHead.innerHTML = `
-                <tr>
-                    <th class="px-4 py-3 text-center w-12 text-slate-500 bg-slate-100 font-bold border-b border-slate-200">#</th>
-                    ${columns.map(col => `<th class="px-4 py-3 text-slate-600 bg-slate-100 font-bold border-b border-slate-200">${escapeHtml(col)}</th>`).join('')}
-                    <th class="px-4 py-3 text-right w-20 text-slate-500 bg-slate-100 font-bold border-b border-slate-200">Acción</th>
-                </tr>
-            `;
-
-            let filtered = data;
-            if (query !== "") {
-                filtered = data.filter(row => {
-                    return columns.some(col => String(row[col] || '').toLowerCase().includes(query));
-                });
-            }
-
-            previewRowCount.innerText = `${filtered.length} filas`;
-
-            const limit = showAllPreview ? filtered.length : Math.min(100, filtered.length);
-            if (filtered.length > 100 && !showAllPreview) {
-                previewLimitLabel.innerText = `Mostrando las primeras 100 filas de ${filtered.length} totales.`;
-                btnLoadAllPreview.classList.remove('hidden');
-            } else {
-                previewLimitLabel.innerText = `Mostrando todos los ${filtered.length} registros.`;
-                btnLoadAllPreview.classList.add('hidden');
-            }
-
-            const visibleRows = filtered.slice(0, limit);
-            
-            tableBody.innerHTML = visibleRows.map((row, idx) => {
-                const originalIndex = data.indexOf(row);
-                const isReplacedEntrada = row._replacedEntrada || (row._replaced && row._replacedEntrada === undefined);
-                const isReplacedSalida = row._replacedSalida;
-                
-                return `
-                    <tr class="hover:bg-slate-50/80 transition-colors border-b border-slate-100">
-                        <td class="px-4 py-3 font-semibold text-slate-400 text-center bg-slate-50/50">${originalIndex + 1}</td>
-                        ${columns.map(col => {
-                            const val = row[col] === undefined ? "" : row[col];
-                            const highlightCell = (col === entradaCol && isReplacedEntrada) || (col === salidaCol && isReplacedSalida);
-                            if (highlightCell) {
-                                return `
-                                    <td class="px-4 py-2.5 bg-emerald-50 text-emerald-800 font-semibold border-y border-emerald-100 cursor-pointer" title="Doble clic para editar (Recuperado de m2)" ondblclick="editCell(this, ${originalIndex}, '${escapeJs(col)}')">
-                                        <div class="flex items-center gap-1">
-                                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-                                            <span>${escapeHtml(val)}</span>
-                                        </div>
-                                    </td>
-                                `;
-                            }
-                            return `
-                                <td class="px-4 py-2.5 text-slate-600 cursor-pointer hover:bg-brand-50/20" title="Doble clic para editar" ondblclick="editCell(this, ${originalIndex}, '${escapeJs(col)}')">
-                                    ${escapeHtml(val)}
-                                </td>
-                            `;
-                        }).join('')}
-                        <td class="px-4 py-2.5 text-right bg-slate-50/30">
-                            <button onclick="deleteRow(${originalIndex})" class="text-rose-600 hover:text-rose-800 font-bold hover:underline" title="Eliminar este registro">
-                                Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            sectionPreview.classList.remove('hidden');
-            sectionPreview.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        // --- CELL EDITING (UPDATE CRUD) ---
-        window.editCell = (cellElement, rowIndex, columnKey) => {
-            const val = mergedResult[rowIndex][columnKey] || "";
-            const input = document.createElement('input');
-            input.type = "text";
-            input.value = val;
-            input.className = "w-full bg-white border border-brand-500 rounded px-2 py-1 text-slate-900 font-medium focus:ring-1 focus:ring-brand-500 focus:outline-none";
-            
-            cellElement.innerHTML = '';
-            cellElement.appendChild(input);
-            input.focus();
-            
-            let finished = false;
-            const saveEdited = () => {
-                if (finished) return;
-                finished = true;
-                const newVal = input.value.trim();
-                mergedResult[rowIndex][columnKey] = newVal;
-                renderPreview(mergedResult);
-            };
-
-            input.onkeydown = (e) => {
-                if (e.key === 'Enter') {
-                    saveEdited();
-                } else if (e.key === 'Escape') {
-                    finished = true;
-                    renderPreview(mergedResult);
-                }
-            };
-            input.onblur = saveEdited;
-        };
-
-        // --- ADD AND DELETE ROWS (CREATE & DELETE CRUD) ---
-        window.addNewRow = () => {
-            if (!mergedResult || mergedResult.length === 0) {
-                alert("Primero debes realizar una fusión para añadir filas a la estructura.");
-                return;
-            }
-            
-            const internalFlags = ['_replaced', '_replacedEntrada', '_replacedSalida'];
-            const columns = Object.keys(mergedResult[0]).filter(k => !internalFlags.includes(k));
-            const newRow = {};
-            columns.forEach(col => {
-                newRow[col] = "";
-            });
-            newRow['_replaced'] = false;
-            newRow['_replacedEntrada'] = false;
-            newRow['_replacedSalida'] = false;
-            
-            mergedResult.unshift(newRow);
-            renderPreview(mergedResult);
-            alert("Nueva fila vacía añadida al principio de la tabla. Haz doble clic en las celdas para rellenar los datos.");
-        };
-
-        window.deleteRow = (index) => {
-            if (confirm(`¿Estás seguro de que deseas eliminar permanentemente el registro #${index + 1}?`)) {
-                mergedResult.splice(index, 1);
-                renderPreview(mergedResult);
-            }
-        };
-
-        btnLoadAllPreview.onclick = () => {
-            showAllPreview = true;
-            renderPreview(mergedResult);
-        };
-
-        previewSearch.oninput = () => {
-            renderPreview(mergedResult);
-        };
-
-        // --- EXPORT FUNCTIONS ---
-        const exportData = (data, filename, format) => {
-            const clean = data.map(row => {
-                const { _replaced, _replacedEntrada, _replacedSalida, ...cleanRow } = row;
-                return cleanRow;
-            });
-
-            const worksheet = XLSX.utils.json_to_sheet(clean);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Resultado Fusión");
-            
-            if (format === 'ods') {
-                XLSX.writeFile(workbook, filename, { bookType: 'ods' });
-            } else if (format === 'xlsx') {
-                XLSX.writeFile(workbook, filename, { bookType: 'xlsx' });
-            }
-        };
-
-        btnDownloadODS.onclick = () => {
-            if (!mergedResult) return;
-            const baseName = file1Name.substring(0, file1Name.lastIndexOf('.')) || file1Name;
-            exportData(mergedResult, `fusionado_${baseName}.ods`, 'ods');
-        };
-
-        btnDownloadXLSX.onclick = () => {
-            if (!mergedResult) return;
-            const baseName = file1Name.substring(0, file1Name.lastIndexOf('.')) || file1Name;
-            exportData(mergedResult, `fusionado_${baseName}.xlsx`, 'xlsx');
-        };
-
-        // --- UTILITY METHODS ---
-        const escapeHtml = (str) => {
-            if (typeof str !== 'string') return str;
-            return str
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        };
-
-        const escapeJs = (str) => {
-            if (typeof str !== 'string') return str;
-            return str.replace(/'/g, "\\'");
-        };
-
-        // --- ATTACH INPUT CHANGE EVENTS ---
-        const handleFile1Change = () => {
-            if (file1Input.files && file1Input.files.length > 0) {
-                processFile(file1Input.files[0], true);
-            }
-        };
-
-        const handleFile2Change = () => {
-            if (file2Input.files && file2Input.files.length > 0) {
-                processFile(file2Input.files[0], false);
-            }
-        };
-
-        file1Input.addEventListener('change', handleFile1Change);
-        file2Input.addEventListener('change', handleFile2Change);
-
-        // Si el navegador mantiene los archivos seleccionados tras recargar la página (F5), procesarlos automáticamente
-        window.addEventListener('DOMContentLoaded', () => {
-            if (file1Input.files && file1Input.files.length > 0) handleFile1Change();
-            if (file2Input.files && file2Input.files.length > 0) handleFile2Change();
+        file1Input.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) readSpreadsheet(e.target.files[0], true);
         });
 
-        initDB();
+        file2Input.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) readSpreadsheet(e.target.files[0], false);
+        });
+
+        // ==========================================
+        // LÓGICA PRINCIPAL DE FUSIÓN (CORREGIDA)
+        // ==========================================
+        function executeMerge() {
+            if (dataM1.length === 0 || dataM2.length === 0) return;
+
+            const keyMode = keyColumnSelect.value;
+            const targetOption = targetColumnSelect.value; // "Entrada" | "Salida" | "Ambas"
+
+            // Si aún no había datos fusionados, partimos de una copia íntegra de m1
+            if (!mergedData || mergedData.length === 0) {
+                mergedData = deepCloneRows(dataM1);
+            }
+
+            // Identificar las columnas de ENTRADA y SALIDA tanto en m1 como en m2
+            const colEntradaM1 = findMatchingColumn(headersM1, 'Entrada');
+            const colSalidaM1  = findMatchingColumn(headersM1, 'Salida');
+            const colEntradaM2 = findMatchingColumn(headersM2, 'Entrada');
+            const colSalidaM2  = findMatchingColumn(headersM2, 'Salida');
+
+            // Determinar qué pares de columnas [colEnM1, colEnM2] son el objetivo a fusionar
+            const targetPairs = [];
+            if (targetOption === 'Entrada') {
+                if (!colEntradaM1 || !colEntradaM2) {
+                    alert('No se encontró la columna "ENTRADA" en uno de los ficheros.');
+                    return;
+                }
+                targetPairs.push({ m1Col: colEntradaM1, m2Col: colEntradaM2 });
+            } else if (targetOption === 'Salida') {
+                if (!colSalidaM1 || !colSalidaM2) {
+                    alert('No se encontró la columna "SALIDA" en uno de los ficheros.');
+                    return;
+                }
+                targetPairs.push({ m1Col: colSalidaM1, m2Col: colSalidaM2 });
+            } else if (targetOption === 'Ambas') {
+                if (colEntradaM1 && colEntradaM2) targetPairs.push({ m1Col: colEntradaM1, m2Col: colEntradaM2 });
+                if (colSalidaM1 && colSalidaM2)   targetPairs.push({ m1Col: colSalidaM1,  m2Col: colSalidaM2 });
+                if (targetPairs.length === 0) {
+                    alert('No se encontraron columnas "ENTRADA" ni "SALIDA" en los ficheros.');
+                    return;
+                }
+            }
+
+            // Construir índice de búsqueda en m2 si se usa columna clave
+            let m2Map = new Map();
+            let keyColM2 = null;
+            if (keyMode !== '__index__') {
+                keyColM2 = findMatchingColumn(headersM2, keyMode) || keyMode;
+                dataM2.forEach((row2) => {
+                    const kVal = normalizeStr(row2[keyColM2]);
+                    if (kVal !== '' && !m2Map.has(kVal)) {
+                        m2Map.set(kVal, row2);
+                    }
+                });
+            }
+
+            let subbedCount = 0;
+            let emptyCount = 0;
+
+            // Recorrer cada fila de la base (mergedData / dataM1)
+            mergedData.forEach((row, idx) => {
+                const origM1Row = dataM1[idx] || {};
+
+                // REGLA CRÍTICA SOLICITADA:
+                // Al seleccionar SALIDA como Columna a Fusionar (Objetivo), se DEBE mantener siempre
+                // el valor de la columna ENTRADA de m1 (sin que sea sobrescrito ni borrado).
+                if (targetOption === 'Salida' && colEntradaM1) {
+                    if (isEmptyVal(row[colEntradaM1]) && !isEmptyVal(origM1Row[colEntradaM1])) {
+                        row[colEntradaM1] = origM1Row[colEntradaM1];
+                    }
+                }
+                // De igual modo, al seleccionar ENTRADA, garantizamos que SALIDA mantenga su valor de m1
+                if (targetOption === 'Entrada' && colSalidaM1) {
+                    if (isEmptyVal(row[colSalidaM1]) && !isEmptyVal(origM1Row[colSalidaM1])) {
+                        row[colSalidaM1] = origM1Row[colSalidaM1];
+                    }
+                }
+
+                // Asegurar que el resto de columnas no objetivo mantengan íntegros sus valores de m1
+                headersM1.forEach(h => {
+                    const isTarget = targetPairs.some(tp => tp.m1Col === h);
+                    if (!isTarget && isEmptyVal(row[h]) && !isEmptyVal(origM1Row[h])) {
+                        row[h] = origM1Row[h];
+                    }
+                });
+
+                // Localizar fila correspondiente en m2
+                let matchingRowM2 = null;
+                if (keyMode === '__index__') {
+                    matchingRowM2 = dataM2[idx] || null;
+                } else {
+                    const keyValM1 = normalizeStr(row[keyMode] ?? origM1Row[keyMode]);
+                    if (keyValM1 !== '') {
+                        matchingRowM2 = m2Map.get(keyValM1) || null;
+                    }
+                }
+
+                // Evaluar únicamente la(s) columna(s) objetivo seleccionada(s)
+                targetPairs.forEach(({ m1Col, m2Col }) => {
+                    // Si en m1 original existía valor y por cualquier motivo la celda actual estuviera vacía, restaurar de m1
+                    if (isEmptyVal(row[m1Col]) && !isEmptyVal(origM1Row[m1Col])) {
+                        row[m1Col] = origM1Row[m1Col];
+                    }
+
+                    // Si la columna objetivo está vacía en la fila actual, tomamos el valor de la columna objetivo en m2
+                    if (isEmptyVal(row[m1Col])) {
+                        const valFromM2 = matchingRowM2 ? matchingRowM2[m2Col] : '';
+                        if (!isEmptyVal(valFromM2)) {
+                            row[m1Col] = String(valFromM2).trim();
+                            cellMeta[`${idx}_${m1Col}`] = 'subbed';
+                            subbedCount++;
+                        } else {
+                            emptyCount++;
+                        }
+                    } else if (cellMeta[`${idx}_${m1Col}`] === 'subbed') {
+                        subbedCount++;
+                    }
+                });
+            });
+
+            // Actualizar estadísticas
+            statM1.textContent = mergedData.length;
+            statM2.textContent = dataM2.length;
+            statSubbed.textContent = subbedCount;
+            statEmpty.textContent = emptyCount;
+
+            sectionStats.classList.remove('hidden');
+            sectionResult.classList.remove('hidden');
+            btnResetBase.classList.remove('hidden');
+
+            renderTable();
+            persistState();
+        }
+
+        btnMerge.addEventListener('click', executeMerge);
+
+        btnResetBase.addEventListener('click', () => {
+            if (dataM1.length === 0) return;
+            mergedData = deepCloneRows(dataM1);
+            cellMeta = {};
+            renderTable();
+            persistState();
+        });
+
+        // ==========================================
+        // RENDERIZADO DE TABLA Y CRUD COMPLETO
+        // ==========================================
+        function renderTable() {
+            const filterText = normalizeStr(searchInput.value);
+
+            // Cabeceras
+            tableHead.innerHTML = '';
+            const trHead = document.createElement('tr');
+            
+            const thIdx = document.createElement('th');
+            thIdx.className = "py-3 px-3 border-b border-slate-200 text-center w-12";
+            thIdx.textContent = "#";
+            trHead.appendChild(thIdx);
+
+            headersM1.forEach(col => {
+                const th = document.createElement('th');
+                th.className = "py-3 px-4 border-b border-slate-200 min-w-[140px]";
+                th.textContent = col;
+                trHead.appendChild(th);
+            });
+
+            const thActions = document.createElement('th');
+            thActions.className = "py-3 px-3 border-b border-slate-200 text-center w-20";
+            thActions.textContent = "Acción";
+            trHead.appendChild(thActions);
+            tableHead.appendChild(trHead);
+
+            // Cuerpo
+            tableBody.innerHTML = '';
+            let visibleCount = 0;
+
+            mergedData.forEach((row, rIdx) => {
+                if (filterText !== '') {
+                    const match = headersM1.some(col => normalizeStr(row[col]).includes(filterText));
+                    if (!match) return;
+                }
+                visibleCount++;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/80 transition-colors";
+
+                // Índice
+                const tdIdx = document.createElement('td');
+                tdIdx.className = "py-2 px-3 text-center text-slate-400 font-mono";
+                tdIdx.textContent = rIdx + 1;
+                tr.appendChild(tdIdx);
+
+                // Celdas editables
+                headersM1.forEach(col => {
+                    const td = document.createElement('td');
+                    const meta = cellMeta[`${rIdx}_${col}`];
+                    let bgClass = "bg-transparent";
+                    if (meta === 'subbed') bgClass = "bg-emerald-50/90 font-semibold text-emerald-900";
+                    if (meta === 'edited') bgClass = "bg-sky-50/90 font-semibold text-sky-900";
+
+                    td.className = `py-1.5 px-2 ${bgClass}`;
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = row[col] ?? '';
+                    input.className = "w-full px-2 py-1 rounded border border-transparent hover:border-slate-300 focus:border-brand-500 focus:bg-white focus:outline-none text-xs transition-all bg-transparent";
+                    input.addEventListener('change', (e) => {
+                        mergedData[rIdx][col] = e.target.value;
+                        cellMeta[`${rIdx}_${col}`] = 'edited';
+                        renderTable();
+                        persistState();
+                    });
+
+                    td.appendChild(input);
+                    tr.appendChild(td);
+                });
+
+                // Botón eliminar fila
+                const tdAction = document.createElement('td');
+                tdAction.className = "py-1.5 px-3 text-center";
+                const btnDel = document.createElement('button');
+                btnDel.className = "text-rose-500 hover:text-rose-700 p-1 rounded hover:bg-rose-50 transition-colors";
+                btnDel.title = "Eliminar fila";
+                btnDel.textContent = "🗑️";
+                btnDel.onclick = () => {
+                    mergedData.splice(rIdx, 1);
+                    statM1.textContent = mergedData.length;
+                    renderTable();
+                    persistState();
+                };
+                tdAction.appendChild(btnDel);
+                tr.appendChild(tdAction);
+
+                tableBody.appendChild(tr);
+            });
+
+            rowCountInfo.textContent = `Mostrando ${visibleCount} de ${mergedData.length} registros`;
+        }
+
+        searchInput.addEventListener('input', renderTable);
+
+        // Añadir nueva fila (CRUD)
+        document.getElementById('btnAddRow').addEventListener('click', () => {
+            if (headersM1.length === 0) return;
+            const newRow = {};
+            headersM1.forEach(h => newRow[h] = '');
+            mergedData.push(newRow);
+            statM1.textContent = mergedData.length;
+            renderTable();
+            persistState();
+        });
+
+        // Limpiar memoria
+        document.getElementById('btnClearStorage').addEventListener('click', async () => {
+            await StorageEngine.clear();
+            alert('Memoria local limpiada correctamente.');
+        });
+
+        // ==========================================
+        // EXPORTACIÓN DE ARCHIVOS (.ODS, .XLSX, .CSV)
+        // ==========================================
+        function exportFile(bookType, ext) {
+            if (!mergedData || mergedData.length === 0) return;
+            const aoa = [headersM1];
+            mergedData.forEach(row => {
+                aoa.push(headersM1.map(h => row[h] ?? ''));
+            });
+            const ws = XLSX.utils.aoa_to_sheet(aoa);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Fusionado');
+            XLSX.writeFile(wb, `fusionado_m1_m2.${ext}`, { bookType });
+        }
+
+        document.getElementById('btnExportODS').addEventListener('click', () => exportFile('ods', 'ods'));
+        document.getElementById('btnExportXLSX').addEventListener('click', () => exportFile('xlsx', 'xlsx'));
+        document.getElementById('btnExportCSV').addEventListener('click', () => exportFile('csv', 'csv'));
+
+        // ==========================================
+        // PERSISTENCIA AUTOMÁTICA
+        // ==========================================
+        async function persistState() {
+            await StorageEngine.save('mergedState', {
+                headersM1,
+                headersM2,
+                dataM1,
+                dataM2,
+                mergedData,
+                cellMeta
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await StorageEngine.init();
+            const saved = await StorageEngine.load('mergedState');
+            if (saved && saved.mergedData && saved.mergedData.length > 0) {
+                headersM1 = saved.headersM1 || [];
+                headersM2 = saved.headersM2 || [];
+                dataM1 = saved.dataM1 || [];
+                dataM2 = saved.dataM2 || [];
+                mergedData = saved.mergedData || [];
+                cellMeta = saved.cellMeta || {};
+
+                updateKeyColumnOptions();
+                checkMergeReady();
+                statM1.textContent = mergedData.length;
+                statM2.textContent = dataM2.length;
+                sectionStats.classList.remove('hidden');
+                sectionResult.classList.remove('hidden');
+                btnResetBase.classList.remove('hidden');
+                renderTable();
+            }
+        });
     </script>
 </body>
 </html>
